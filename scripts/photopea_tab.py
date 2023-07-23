@@ -28,7 +28,7 @@ def on_ui_tabs():
 
         with gr.Row():
             show_photopea = gr.Button(
-                label='Load Photopea')
+                label='Load Photopea', elem_id="photopeaLoadButton")
 
         with gr.Row(elem_id="photopeaIframeContainer") as photopea_iframe:
             pass

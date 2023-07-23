@@ -9,6 +9,11 @@ const PHOTOPEA_IFRAME_WIDTH = "100%";
 
 function loadPhotopea() {
   //add the iframe
+  if (gradioApp().getElementById(PHOTOPEA_IFRAME_ID) !== null) {
+    return;
+  }
+  gradioApp().getElementById(photopeaLoadButton).remove();
+
   const iframe = document.createElement("iframe");
   iframe.id = PHOTOPEA_IFRAME_ID;
   iframe.src = PHOTOPEA_MAIN_URL;
