@@ -12,11 +12,13 @@ function loadPhotopea() {
   if (gradioApp().getElementById(PHOTOPEA_IFRAME_ID) !== null) {
     return;
   }
-  gradioApp().getElementById(photopeaLoadButton).remove();
+  gradioApp().getElementById("photopeaLoadButton").remove();
 
   const iframe = document.createElement("iframe");
   iframe.id = PHOTOPEA_IFRAME_ID;
-  iframe.src = PHOTOPEA_MAIN_URL;
+  iframe.src =
+    PHOTOPEA_MAIN_URL +
+    "#%7B%22resources%22:%5B%22data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAgAAAAIAAQMAAADOtka5AAAAAXNSR0IB2cksfwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAANQTFRF////p8QbyAAAADZJREFUeJztwQEBAAAAgiD/r25IQAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAfBuCAAAB0niJ8AAAAABJRU5ErkJggg==%22%5D%7D";
   iframe.width = PHOTOPEA_IFRAME_WIDTH;
   iframe.height = PHOTOPEA_IFRAME_HEIGHT;
   iframe.onload = onPhotopeaLoaded;
