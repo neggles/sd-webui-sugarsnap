@@ -11,7 +11,12 @@ PHOTOPEA_IFRAME_WIDTH = "100%"
 PHOTOPEA_IFRAME_LOADED_EVENT = "onPhotopeaLoaded"
 
 
+def gr_show(visible=True):
+    return {"visible": visible, "__type__": "update"}
+
 # Adds the "Photopea" tab to the WebUI
+
+
 def on_ui_tabs():
     with gr.Blocks(analytics_enabled=False) as photopea_tab:
         # Check if Controlnet is installed and enabled in settings, so we can show or hide the "Send to Controlnet" buttons.
@@ -23,13 +28,15 @@ def on_ui_tabs():
 
         with gr.Row():
             # Add an iframe with Photopea directly in the tab.
-            gr.HTML(
+            show_photopea = gr.Checkbox(
+                label='Load Photopea', value=False)
+
+            photopea_iframe = gr.HTML(
                 f"""<iframe id="{PHOTOPEA_IFRAME_ID}" 
                 src = "{PHOTOPEA_MAIN_URL}{get_photopea_url_params()}" 
                 width = "{PHOTOPEA_IFRAME_WIDTH}" 
                 height = "{PHOTOPEA_IFRAME_HEIGHT}"
-                onload = "{PHOTOPEA_IFRAME_LOADED_EVENT}(this)">"""
-            )
+                onload = "{PHOTOPEA_IFRAME_LOADED_EVENT}(this)">""", visible=False, elem_id="photopea-iframe-container")
         with gr.Row():
             gr.Checkbox(
                 label="Active Layer Only",
@@ -112,7 +119,15 @@ def on_ui_tabs():
             None,
             _js="(i) => {getAndSendImageToWebUITab('img2img', true, i)}",
         )
-        send_selection_inpaint.click(fn=None, _js="sendImageWithMaskSelectionToWebUi")
+        send_selection_inpaint.click(
+            fn=None, _js="sendImageWithMaskSelectionToWebUi")
+
+        show_photopea.change(
+            fn=lambda x: gr_show(x),
+            inputs=[show_photopea],
+            outputs=[photopea_iframe],
+            show_progress=False,
+        )
 
     return [(photopea_tab, "Photopea", "photopea_embed")]
 
