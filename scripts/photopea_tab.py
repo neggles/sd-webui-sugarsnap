@@ -27,16 +27,19 @@ def on_ui_tabs():
                 break
 
         with gr.Row():
-            # Add an iframe with Photopea directly in the tab.
-            show_photopea = gr.Checkbox(
-                label='Load Photopea', value=False)
+            show_photopea = gr.Button(
+                label='Load Photopea')
 
-            photopea_iframe = gr.HTML(
-                f"""<iframe id="{PHOTOPEA_IFRAME_ID}" 
-                src = "{PHOTOPEA_MAIN_URL}{get_photopea_url_params()}" 
-                width = "{PHOTOPEA_IFRAME_WIDTH}" 
-                height = "{PHOTOPEA_IFRAME_HEIGHT}"
-                onload = "{PHOTOPEA_IFRAME_LOADED_EVENT}(this)">""", visible=False, elem_id="photopea-iframe-container")
+        with gr.Row(visible=False, elem_id="photopeaIframeContainer") as photopea_iframe:
+            pass
+            # # Add an iframe with Photopea directly in the tab.
+            # gr.HTML(
+            #     f"""<iframe id="{PHOTOPEA_IFRAME_ID}"
+            #     src = "{PHOTOPEA_MAIN_URL}{get_photopea_url_params()}"
+            #     width = "{PHOTOPEA_IFRAME_WIDTH}"
+            #     height = "{PHOTOPEA_IFRAME_HEIGHT}"
+            #     onload = "{PHOTOPEA_IFRAME_LOADED_EVENT}(this)">""")
+
         with gr.Row():
             gr.Checkbox(
                 label="Active Layer Only",
@@ -122,11 +125,9 @@ def on_ui_tabs():
         send_selection_inpaint.click(
             fn=None, _js="sendImageWithMaskSelectionToWebUi")
 
-        show_photopea.change(
-            fn=lambda x: gr_show(x),
-            inputs=[show_photopea],
-            outputs=[photopea_iframe],
-            show_progress=False,
+        show_photopea.click(
+            fn=None,
+            _js="loadPhotopea"
         )
 
     return [(photopea_tab, "Photopea", "photopea_embed")]
