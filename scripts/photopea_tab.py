@@ -3,20 +3,8 @@ from modules import script_callbacks
 from modules.shared import opts
 from modules import extensions
 
-# Handy constants
-PHOTOPEA_MAIN_URL = "https://www.photopea.com/"
-PHOTOPEA_IFRAME_ID = "webui-photopea-iframe"
-PHOTOPEA_IFRAME_HEIGHT = 768
-PHOTOPEA_IFRAME_WIDTH = "100%"
-PHOTOPEA_IFRAME_LOADED_EVENT = "onPhotopeaLoaded"
-
-
-def gr_show(visible=True):
-    return {"visible": visible, "__type__": "update"}
 
 # Adds the "Photopea" tab to the WebUI
-
-
 def on_ui_tabs():
     with gr.Blocks(analytics_enabled=False) as photopea_tab:
         # Check if Controlnet is installed and enabled in settings, so we can show or hide the "Send to Controlnet" buttons.
@@ -32,13 +20,6 @@ def on_ui_tabs():
 
         with gr.Row(elem_id="photopeaIframeContainer") as photopea_iframe:
             pass
-            # # Add an iframe with Photopea directly in the tab.
-            # gr.HTML(
-            #     f"""<iframe id="{PHOTOPEA_IFRAME_ID}"
-            #     src = "{PHOTOPEA_MAIN_URL}{get_photopea_url_params()}"
-            #     width = "{PHOTOPEA_IFRAME_WIDTH}"
-            #     height = "{PHOTOPEA_IFRAME_HEIGHT}"
-            #     onload = "{PHOTOPEA_IFRAME_LOADED_EVENT}(this)">""")
 
         with gr.Row():
             gr.Checkbox(
@@ -131,11 +112,6 @@ def on_ui_tabs():
         )
 
     return [(photopea_tab, "Photopea", "photopea_embed")]
-
-
-# Initialize Photopea with an empty, 512x512 white image. It's baked as a base64 string with URI encoding.
-def get_photopea_url_params():
-    return "#%7B%22resources%22:%5B%22data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAgAAAAIAAQMAAADOtka5AAAAAXNSR0IB2cksfwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAANQTFRF////p8QbyAAAADZJREFUeJztwQEBAAAAgiD/r25IQAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAfBuCAAAB0niJ8AAAAABJRU5ErkJggg==%22%5D%7D"
 
 
 # Actually hooks up the tab to the WebUI tabs.
