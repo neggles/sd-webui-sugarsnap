@@ -1,4 +1,14 @@
-# Photopea Stable Diffusion WebUI Extension
+# Photopea Stable Diffusion WebUI Extension (LAZY LOADED FORK)
+
+## Wdym lazy loaded?
+Meaning it doesn't load on first launch. Which is uses too much unecessary bandwith + lagging down low end PCs and mobile users
+
+Mainly for my colab, but feel free to use it :>
+
+![image](https://github.com/NoCrypt/sd-photopea-embed-lazy/assets/57245077/eb42efda-d58c-43f7-a09f-180147774ffe)
+
+
+---
 
 [![Demo video](https://img.youtube.com/vi/f_OXiNAvtII/0.jpg)](https://youtu.be/f_OXiNAvtII)
 
