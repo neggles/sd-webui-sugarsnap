@@ -28,8 +28,9 @@ function loadPhotopea() {
 }
 
 // Called by the iframe set up on photopea-tab.py.
-function onPhotopeaLoaded(iframe) {
+function onPhotopeaLoaded(e) {
   console.log("Photopea iFrame loaded");
+  const iframe = gradioApp().getElementById("webui-photopea-iframe")
   photopeaWindow = iframe.contentWindow;
   photopeaIframe = iframe;
 
