@@ -30,7 +30,7 @@ def on_ui_tabs():
             show_photopea = gr.Button(
                 label='Load Photopea')
 
-        with gr.Row(visible=False, elem_id="photopeaIframeContainer") as photopea_iframe:
+        with gr.Row(elem_id="photopeaIframeContainer") as photopea_iframe:
             pass
             # # Add an iframe with Photopea directly in the tab.
             # gr.HTML(
