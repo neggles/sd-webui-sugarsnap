@@ -24,10 +24,9 @@ def _get_setting(name: str, default=None):
 def update_photopea(repo_url: str, target_dir: Path = photopea_app_dir, commit_hash: str = "") -> bool:
     global update_success
     try:
-        if target_dir.joinpath(".git").exists():
-            logger.info("Installing Photopea...")
-            launch_utils.git_clone(
-                url=repo_url, dir=target_dir, name="Photopea", commithash=commit_hash)
+        logger.info("Installing Photopea...")
+        launch_utils.git_clone(
+            url=repo_url, dir=target_dir, name="Photopea", commithash=commit_hash)
         logger.info("Photopea installation up-to-date.")
         return True
     except Exception:
