@@ -25,9 +25,6 @@ def update_photopea(repo_url: str, target_dir: Path = photopea_app_dir, commit_h
     global update_success
     try:
         if target_dir.joinpath(".git").exists():
-            logger.info("Updating existing Photopea installation...")
-            launch_utils.git_pull_recursive(target_dir)
-        else:
             logger.info("Installing Photopea...")
             launch_utils.git_clone(
                 url=repo_url, dir=target_dir, name="Photopea", commithash=commit_hash)
