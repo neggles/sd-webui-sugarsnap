@@ -1,10 +1,79 @@
+import logging
+from pathlib import Path
+
 import gradio as gr
-from modules import script_callbacks
-from modules.shared import opts
-from modules import extensions
+from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
+from modules import script_callbacks, shared, launch_utils, scripts, extensions
 
 
-# Adds the "Photopea" tab to the WebUI
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+
+photopea_ext_dir = Path(scripts.basedir())
+photopea_app_dir = photopea_ext_dir.joinpath("app")
+
+opt_section = ("photopea", "Photopea")
+update_success = False
+
+
+def _get_setting(name: str, default=None):
+    return shared.opts.data.get(f"photopea_{name}", default)
+
+
+def update_photopea(repo_url: str, target_dir: Path = photopea_app_dir, commit_hash: str = "") -> bool:
+    global update_success
+    try:
+        if target_dir.joinpath(".git").exists():
+            logger.info("Updating existing Photopea installation...")
+            launch_utils.git_pull_recursive(target_dir)
+        else:
+            logger.info("Installing Photopea...")
+            launch_utils.git_clone(
+                url=repo_url, dir=target_dir, name="Photopea", commithash=commit_hash)
+        logger.info("Photopea installation up-to-date.")
+        return True
+    except Exception:
+        logger.critical(
+            "Failed to update Photopea, will not load!", exc_info=True)
+        return False
+
+
+def on_before_ui() -> None:
+    global update_success
+    repo_url = _get_setting(
+        "repo_url", "https://git.nixnet.services/DUOLabs333/Photopea-Offline.git")
+    commit_hash = _get_setting("commit_hash", "")
+    update_success = update_photopea(
+        repo_url=repo_url,
+        target_dir=photopea_app_dir,
+        commit_hash=commit_hash if commit_hash != "" else None,
+    )
+
+
+def on_ui_settings() -> None:
+    shared.opts.add_option(
+        "photopea_repo_url",
+        shared.OptionInfo(
+            default="https://git.nixnet.services/DUOLabs333/Photopea-Offline.git",
+            label="Photopea repository URL",
+            component=gr.Textbox,
+            component_args={"interactive": True, "max_lines": 1},
+            section=opt_section,
+        ),
+    )
+    shared.opts.add_option(
+        "photopea_commit_hash",
+        shared.OptionInfo(
+            default="",
+            label="Photopea repository commit hash",
+            component=gr.Textbox,
+            component_args={"interactive": True, "max_lines": 1},
+            section=opt_section,
+        ),
+    )
+
+
 def on_ui_tabs():
     with gr.Blocks(analytics_enabled=False) as photopea_tab:
         # Check if Controlnet is installed and enabled in settings, so we can show or hide the "Send to Controlnet" buttons.
@@ -18,7 +87,7 @@ def on_ui_tabs():
             show_photopea = gr.Button(
                 value='Load Photopea', elem_id="photopeaLoadButton")
 
-        with gr.Row(elem_id="photopeaIframeContainer") as photopea_iframe:
+        with gr.Row(elem_id="photopeaIframeContainer"):
             pass
 
         with gr.Row():
@@ -29,7 +98,7 @@ def on_ui_tabs():
             )
             # Controlnet might have more than one model tab (set by the 'control_net_max_models_num' setting).
             try:
-                num_controlnet_models = opts.control_net_max_models_num
+                num_controlnet_models = shared.opts.control_net_max_models_num
             except:
                 num_controlnet_models = 1
 
@@ -114,5 +183,29 @@ def on_ui_tabs():
     return [(photopea_tab, "Photopea", "photopea_embed")]
 
 
-# Actually hooks up the tab to the WebUI tabs.
+def on_app_started(_: gr.Blocks, app: FastAPI) -> None:
+    global update_success
+    if update_success is True:
+        logger.info("Photopea update successful, mounting app...")
+        # Create a static app from the photopea app directory
+        photopea_app = StaticFiles(
+            directory=photopea_app_dir.joinpath("www.photopea.com"),
+            html=True,
+        )
+        # Mount it at /photopea
+        app.mount(path="/photopea", app=photopea_app, name="photopea")
+    else:
+        logger.warn("Photopea not loaded due to update failure!")
+
+
+# register callbacks
+
+# this is called first, before the UI is built, so we'll update photopea here
+script_callbacks.on_before_ui(on_before_ui)
+
+# when the UI is built, we'll add the options and (if update was successful) the tab
+script_callbacks.on_ui_settings(on_ui_settings)
 script_callbacks.on_ui_tabs(on_ui_tabs)
+
+# then when the app is started, we'll mount the static webapp at /photopea
+script_callbacks.on_app_started(on_app_started)
