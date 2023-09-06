@@ -24,10 +24,10 @@ def _get_setting(name: str, default=None):
 def update_photopea(repo_url: str, target_dir: Path = photopea_app_dir, commit_hash: str = "") -> bool:
     global update_success
     try:
-        logger.info("Installing Photopea...")
+        # logger.info("Installing Photopea...")
         launch_utils.git_clone(
             url=repo_url, dir=target_dir, name="Photopea", commithash=commit_hash)
-        logger.info("Photopea installation up-to-date.")
+        # logger.info("Photopea installation up-to-date.")
         return True
     except Exception:
         logger.critical(
@@ -182,7 +182,7 @@ def on_ui_tabs():
 def on_app_started(_: gr.Blocks, app: FastAPI) -> None:
     global update_success
     if update_success is True:
-        logger.info("Photopea update successful, mounting app...")
+        # logger.info("Photopea update successful, mounting app...")
         # Create a static app from the photopea app directory
         photopea_app = StaticFiles(
             directory=photopea_app_dir.joinpath("www.photopea.com"),
