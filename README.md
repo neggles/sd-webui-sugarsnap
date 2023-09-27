@@ -1,22 +1,18 @@
-# Photopea Stable Diffusion WebUI Extension (LAZY LOADED FORK)
+# an embedded image editor for [stable-diffusion-webui](https://github.com/AUTOMATIC1111/stable-diffusion-webui)
 
-## Wdym lazy loaded?
-Meaning it doesn't load on first launch. Which is uses too much unecessary bandwith + lagging down low end PCs and mobile users
+lazyloaded thanks to [NoCrypt](https://github.com/NoCrypt)
 
-Mainly for my colab, but feel free to use it :>
-
-![image](https://github.com/NoCrypt/sd-photopea-embed-lazy/assets/57245077/eb42efda-d58c-43f7-a09f-180147774ffe)
-
+this is absolutely not photopea, no sir, the entire rest of this readme is a lie, this is clearly sugarsnap
 
 ---
 
 [![Demo video](https://img.youtube.com/vi/f_OXiNAvtII/0.jpg)](https://youtu.be/f_OXiNAvtII)
 
-[Photopea](https://www.photopea.com) is essentially Photoshop in a browser. This is a simple extension to add a Photopea tab to [AUTOMATIC1111 Stable Diffusion WebUI](https://github.com/AUTOMATIC1111/stable-diffusion-webui/).
+[Photopea](https://www.photopea.com) is essentially Photoshop in a browser. This is a simple extension to add a Photopea tab to ye olde stable diffusion webui.
 
 In the tab, you will have an embedded Photopea editor and a few buttons to send the image to different WebUI sections, and also buttons to send generated content to the embeded Photopea.
 
-Consider supporting Photopea by [going premium](https://www.photopea.com/api/accounts)!
+Consider supporting Photopea by [going premium](https://www.photopea.com/api/accounts)! (or don't since the creator is an ass)
 
 ## Installation
 
