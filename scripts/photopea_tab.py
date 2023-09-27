@@ -25,20 +25,17 @@ def update_photopea(repo_url: str, target_dir: Path = photopea_app_dir, commit_h
     global update_success
     try:
         # logger.info("Installing Photopea...")
-        launch_utils.git_clone(
-            url=repo_url, dir=target_dir, name="Photopea", commithash=commit_hash)
+        launch_utils.git_clone(url=repo_url, dir=target_dir, name="Photopea", commithash=commit_hash)
         # logger.info("Photopea installation up-to-date.")
         return True
     except Exception:
-        logger.critical(
-            "Failed to update Photopea, will not load!", exc_info=True)
+        logger.critical("Failed to update Photopea, will not load!", exc_info=True)
         return False
 
 
 def on_before_ui() -> None:
     global update_success
-    repo_url = _get_setting(
-        "repo_url", "https://git.nixnet.services/DUOLabs333/Photopea-Offline.git")
+    repo_url = _get_setting("repo_url", "https://git.nixnet.services/DUOLabs333/Photopea-Offline.git")
     commit_hash = _get_setting("commit_hash", "")
     update_success = update_photopea(
         repo_url=repo_url,
@@ -80,8 +77,7 @@ def on_ui_tabs():
                 break
 
         with gr.Row():
-            show_photopea = gr.Button(
-                value='Load Photopea', elem_id="photopeaLoadButton")
+            show_photopea = gr.Button(value="Load Photopea", elem_id="photopeaLoadButton")
 
         with gr.Row(elem_id="photopeaIframeContainer"):
             pass
@@ -123,16 +119,12 @@ def on_ui_tabs():
                     """<b>Controlnet extension not found!</b> Either <a href="https://github.com/Mikubill/sd-webui-controlnet" target="_blank">install it</a>, or activate it under Settings.""",
                     visible=not controlnet_exists,
                 )
-                send_t2i_cn = gr.Button(
-                    value="Send to txt2img ControlNet", visible=controlnet_exists
-                )
+                send_t2i_cn = gr.Button(value="Send to txt2img ControlNet", visible=controlnet_exists)
                 send_extras = gr.Button(value="Send to Extras")
 
             with gr.Column():
                 send_i2i = gr.Button(value="Send to img2img")
-                send_i2i_cn = gr.Button(
-                    value="Send to img2img ControlNet", visible=controlnet_exists
-                )
+                send_i2i_cn = gr.Button(value="Send to img2img ControlNet", visible=controlnet_exists)
             with gr.Column():
                 send_selection_inpaint = gr.Button(value="Inpaint selection")
 
@@ -168,13 +160,9 @@ def on_ui_tabs():
             None,
             _js="(i) => {getAndSendImageToWebUITab('img2img', true, i)}",
         )
-        send_selection_inpaint.click(
-            fn=None, _js="sendImageWithMaskSelectionToWebUi")
+        send_selection_inpaint.click(fn=None, _js="sendImageWithMaskSelectionToWebUi")
 
-        show_photopea.click(
-            fn=None,
-            _js="loadPhotopea"
-        )
+        show_photopea.click(fn=None, _js="loadPhotopea")
 
     return [(photopea_tab, "Photopea", "photopea_embed")]
 
