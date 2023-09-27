@@ -10,10 +10,10 @@
 // response from the script execution message. But hey, if it works... ^^'
 function exportSelectedLayerOnly() {
     // Gets all layers recursively, including the ones inside folders.
-    function getAllArtLayers (document, layerCollection){
-        for (var i = 0; i < document.layers.length; i++){
+    function getAllArtLayers(document, layerCollection) {
+        for (var i = 0; i < document.layers.length; i++) {
             var currentLayer = document.layers[i];
-            if (currentLayer.typename === "ArtLayer"){
+            if (currentLayer.typename === "ArtLayer") {
                 layerCollection.push(currentLayer);
             } else {
                 getAllArtLayers(currentLayer, layerCollection);
@@ -22,14 +22,14 @@ function exportSelectedLayerOnly() {
         return layerCollection;
     }
 
-    var allLayers = []
+    var allLayers = [];
     allLayers = getAllArtLayers(app.activeDocument, allLayers);
     // Make all layers except the currently selected one invisible, and store
     // their initial state.
-    layerStates = []
+    layerStates = [];
     for (var i = 0; i < allLayers.length; i++) {
-        layerStates.push(allLayers[i].visible)
-        allLayers[i].visible = allLayers[i] == app.activeDocument.activeLayer
+        layerStates.push(allLayers[i].visible);
+        allLayers[i].visible = allLayers[i] == app.activeDocument.activeLayer;
     }
 
     // Output the image. We output JPG to make sure we don't end up with transparent backgrounds.
@@ -37,11 +37,11 @@ function exportSelectedLayerOnly() {
 
     // Restore layers
     for (var i = 0; i < allLayers.length; i++) {
-        allLayers[i].visible = layerStates[i]
+        allLayers[i].visible = layerStates[i];
     }
 }
 
-// Creates a black and white mask based on the current selection in the active document. 
+// Creates a black and white mask based on the current selection in the active document.
 function createMaskFromSelection() {
     if (app.activeDocument.selection === null) {
         app.echo("No selection!");
@@ -55,15 +55,15 @@ function createMaskFromSelection() {
     // Fill the inverse of the selection with black.
     app.activeDocument.selection.invert();
     color = new SolidColor();
-    color.rgb.red = 0
-    color.rgb.green = 0
-    color.rgb.blue = 0
+    color.rgb.red = 0;
+    color.rgb.green = 0;
+    color.rgb.blue = 0;
     app.activeDocument.selection.fill(color);
 
     // Fill the selected part with white.
-    color.rgb.red = 255
-    color.rgb.green = 255
-    color.rgb.blue = 255
+    color.rgb.red = 255;
+    color.rgb.green = 255;
+    color.rgb.blue = 255;
     app.activeDocument.selection.invert();
     app.activeDocument.selection.fill(color);
 }
